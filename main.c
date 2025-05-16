@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+// -------------------------------
+// [INFO]: edit bagian ini saja
+// -------------------------------
 #define NODE 14
 #define EDGE 24
 #define SIZE_RESULT 7
@@ -37,6 +40,8 @@ int nodes_index[EDGE][2] = {
   { 7, 1 },
   { 12, 6 },
 };
+
+// ==
 
 uint64_t max_combination;
 uint8_t* bitset;
@@ -128,30 +133,6 @@ void free_bitset()
 {
   free(bitset);
 }
-void print_bitset(int num_bits)
-{
-  for (int i = 0; i < num_bits; i++) {
-    int byte_index = i / 8;
-    int bit_index = i % 8;
-    printf("%d", (bitset[byte_index] & (1 << bit_index)) ? 1 : 0);
-    if ((i + 1) % 8 == 0) {
-      printf(" ");
-    }
-  }
-  printf("\n");
-}
-
-void print_all_seen()
-{
-  printf("Permutasi yang sudah dimasukkan (rank):\n");
-  for (uint64_t i = 0; i < max_combination; i++) {
-    int byte_index = i / 8;
-    int bit_index = i % 8;
-    if (bitset[byte_index] & (1 << bit_index)) {
-      printf("Rank: %lu\n", i);
-    }
-  }
-}
 
 void set_empty_arr(int arr[], int size)
 {
@@ -190,12 +171,10 @@ void shuffle(int* arr, int n)
 
 void generate_combination(int nodes[])
 {
-  int arr[] = { 0, 13, 12, 1, 3, 8, 9, 6, 4, 11, 5, 2, 10, 7 };
   for (int i = 0; i < NODE; i++) {
-    nodes[i] = arr[i] + 1;
-    // nodes[i] = i + 1;
+    nodes[i] = i + 1;
   }
-  // shuffle(nodes, NODE);
+  shuffle(nodes, NODE);
 }
 
 // void generate_combination(int nodes[])
@@ -261,7 +240,7 @@ void filter_result(int calculate_nodes[], int result[], int* size_result)
     if (*size_result >= 100) {
 
       printf("buffer overflow\n");
-      break; // Hindari buffer overflow
+      break;
     }
     if (!includes(result, *size_result, calculate_nodes[i])) {
       result[*size_result] = calculate_nodes[i];
@@ -393,8 +372,6 @@ int main()
     display_result(nodes, calculate_nodes, short_calculate, result, size_result);
   } else
     printf("\n[Kombinasi Tidak Ditemukan]\n");
-
-  // print_bitset(64);
 
   close_bitset_file();
 
