@@ -373,6 +373,8 @@ int main()
   } else
     printf("\n[Kombinasi Tidak Ditemukan]\n");
 
+  // free_bitset();
+
   close_bitset_file();
 
   return 0;
