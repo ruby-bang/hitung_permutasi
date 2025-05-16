@@ -1,24 +1,9 @@
-
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <time.h>
-
-#ifdef _WIN32
-#include <direct.h>
-#include <io.h>
-#define ACCESS _access
-#define MKDIR(dir) _mkdir(dir)
-#else
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#define ACCESS access
-#define MKDIR(dir) mkdir(dir, 0755)
-#endif
 
 // -------------------------------
 // [INFO]: edit bagian ini saja
@@ -46,6 +31,19 @@ int nodes_index[EDGE][2] = {
 // -------------------------------
 // [END]
 // -------------------------------
+
+#ifdef _WIN32
+#include <direct.h>
+#include <io.h>
+#define ACCESS _access
+#define MKDIR(dir) _mkdir(dir)
+#else
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#define ACCESS access
+#define MKDIR(dir) mkdir(dir, 0755)
+#endif
 
 uint64_t max_combination;
 uint8_t* bitset;
