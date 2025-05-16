@@ -4,7 +4,21 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <time.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#include <io.h>
+#define ACCESS _access
+#define MKDIR(dir) _mkdir(dir)
+#else
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#define ACCESS access
+#define MKDIR(dir) mkdir(dir, 0755)
+#endif
 
 // -------------------------------
 // [INFO]: edit bagian ini saja
@@ -281,21 +295,40 @@ void mark_seen_file(uint64_t rank)
   fseek(bitset_file, byte_index, SEEK_SET);
   fwrite(&byte, 1, 1, bitset_file);
 }
+
 void close_bitset_file()
 {
   fclose(bitset_file);
 }
 
+void make_folder()
+{
+  const char* folder_name = "bitset";
+
+  if (access(folder_name, F_OK) != 0) {
+    if (mkdir(folder_name, 0755) == 0) {
+      printf("Folder berhasil dibuat: %s\n", folder_name);
+    } else {
+      perror("Gagal membuat folder");
+    }
+  } else {
+    printf("Folder sudah ada: %s\n", folder_name);
+  }
+}
 int main()
 {
 
   srand(time(NULL));
   // init_bitset();
 
+  char filename[100];
+  char foldername[] = "bitset";
+
   time_t now = time(NULL);
 
-  char filename[100];
-  snprintf(filename, sizeof(filename), "bitset_%ld.dat", now);
+  make_folder();
+
+  snprintf(filename, sizeof(filename), "%s/bitset_%ld.dat", foldername, now);
   max_combination = permutasi(NODE, NODE);
   init_bitset_file(filename, MAX_PERMUTASI);
 
